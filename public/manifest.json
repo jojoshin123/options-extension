@@ -3,7 +3,7 @@
     "name": "React Chrome Extension",
     "version": "1.0",
     "description": "A Chrome extension using React",
-    "permissions": ["activeTab", "scripting"],
+    "permissions": ["activeTab", "scripting", "storage"],
     "background": {
         "service_worker": "background.js"
     },
