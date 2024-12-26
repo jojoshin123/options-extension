@@ -5,21 +5,18 @@
     "description": "A Chrome extension using React",
     "permissions": ["activeTab", "scripting"],
     "background": {
-      "service_worker": "background.js"
+        "service_worker": "background.js"
     },
     "action": {
-      "default_popup": "index.html",
-      "default_icon": {
-        "16": "images/icon16.png",
-        "48": "images/icon48.png",
-        "128": "images/icon128.png"
-      }
+        "default_popup": "index.html",
+        "default_icon": {
+            "32": "icons/logo32.png",
+            "64": "icons/logo64.png",
+            "128": "icons/logo128.png"
+        }
     },
-    "content_scripts": [
-      {
+    "content_scripts": [{
         "matches": ["<all_urls>"],
         "js": ["content.js"]
-      }
-    ]
-  }
-  
+    }]
+}

@@ -1,18 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from "react";
+import OptionsPage from "./OptionsPage/OptionsPage.tsx"
+import ReroutePage from "./ReroutePage/ReroutePage.tsx"
 import './App.css'
 
 function App() {
+  const [currentUrl, setCurrentUrl] = useState('');
 
-  return (
-    <>
-      <h1>Vite + React</h1>
-      <div>
-        <p>Filler</p>
-      </div>
-    </>
-  )
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+      if (tabs[0] && tabs[0].url) {
+        setCurrentUrl(tabs[0].url);
+      }
+    });
+  }, []);
+
+
+  if (currentUrl.includes('robinhood.com/options/chains/')) {
+    return <OptionsPage />;
+  } else {
+    return <ReroutePage />;
+  } 
 }
 
 export default App
