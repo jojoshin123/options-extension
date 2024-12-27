@@ -4,5 +4,8 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    chrome.storage.local.set({ isToggled: message.type === 'TOGGLED' });
+    chrome.storage.local.set({
+        isToggled: message.type === 'TOGGLED',
+        data: message.data
+    });
 });

@@ -3,9 +3,12 @@ import OptionsPage from "./OptionsPage/OptionsPage.tsx"
 import ReroutePage from "./ReroutePage/ReroutePage.tsx"
 import './App.css'
 
+import { Option } from './types/Option.tsx'
+
 function App() {
   const [currentUrl, setCurrentUrl] = useState('');
   const [toggled, setToggled] = useState(false);
+  const [option, setOption] = useState<Option | null>(null)
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
@@ -16,19 +19,30 @@ function App() {
 
     // Set listener for messages from the content script
     chrome.storage.local.get(['isToggled'], (result) => {
-      console.log("isToggled: " + result.isToggled)
       setToggled(result.isToggled);
     });
 
-    // // Cleanup listener on unmount
-    // return () => {
-    //     chrome.runtime.onMessage.removeListener(handleMessage);
-    // };
+    chrome.storage.local.get(['data'], (result) => {
+      const tokenArr = result.data.split(" ")
+
+      // Expirations this year don't have the year
+      const date = tokenArr[3].split("/").length == 2 
+      ? tokenArr[3].concat("/" + new Date().getFullYear())
+      : tokenArr[3];
+
+      setOption({
+        ticker: tokenArr[0],
+        strike: tokenArr[1],
+        contract: tokenArr[2] == 'Call' ? 'call' : 'put',
+        expiration: new Date(date)
+      })
+    });
+
   }, []);
 
 
   if (currentUrl.includes('robinhood.com/options/chains/')) {
-    return <OptionsPage toggle={toggled}/>;
+    return <OptionsPage toggle={toggled} option={option}/>;
   } else {
     return <ReroutePage />;
   } 

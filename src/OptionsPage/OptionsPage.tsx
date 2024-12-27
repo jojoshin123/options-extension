@@ -1,16 +1,20 @@
+import { Option } from '../types/Option.tsx'
 
 interface OptionsPageProps {
     toggle: boolean;
+    option: Option | null;
   }
 
-function OptionsPage({toggle}: OptionsPageProps) {
+function OptionsPage({toggle, option}: OptionsPageProps) {
 
     if (toggle){
         return (
             <>
-            <h1>Vite + React</h1>
             <div>
-                <p>Filler</p>
+                <p>{option?.ticker}</p>
+                <p>{option?.contract}</p>
+                <p>{option?.expiration.toDateString()}</p>
+                <p>{option?.strike.toString()}</p>
             </div>
             </>
         );
