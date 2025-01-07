@@ -41,8 +41,8 @@ function App() {
   }, []);
 
 
-  if (currentUrl.includes('robinhood.com/options/chains/')) {
-    return <OptionsPage toggle={toggled} option={option}/>;
+  if (currentUrl.includes('robinhood.com/options/chains/') && toggled) {
+    return <OptionsPage option={option}/>;
   } else {
     return <ReroutePage />;
   } 
