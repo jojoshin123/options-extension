@@ -1,0 +1,41 @@
+// Grid.scss
+.grid-container {
+    width: 100%;
+    // max-width: 640px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-row {
+    display: flex;
+}
+
+.grid-cell {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    &:hover {
+        background-color: #f7fafc;
+    }
+}
+
+.grid-month-light {
+    background-color: #e2e8f0;
+    border: 1px solid #e2e8f0;
+}
+
+.grid-month-dark {
+    background-color: #e2e8f072;
+    border: 1px solid #e2e8f072;
+}
+
+.bold {
+    font-weight: 800;
+}
