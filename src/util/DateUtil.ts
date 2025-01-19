@@ -20,10 +20,26 @@ function divideDateInterval(expiration: Date): Date[] {
 
     // Stop before last column
     for (let i=0; i<INTERVAL_COUNT-1;i++){
-        toReturn.push(addDays(today, daysIncrement*i))
+        const newDay : Date = addDays(today, daysIncrement*i);
+        if (toReturn.length > 0){
+            console.log(toReturn[toReturn.length-1])
+        }
+        if (toReturn.length > 0 && 
+            newDay.toISOString().slice(0, 16) == toReturn[toReturn.length-1].toISOString().slice(0, 16)){
+            continue
+        }else{
+            toReturn.push(newDay)
+        }
     }
-    // Manually set last column
-    toReturn[INTERVAL_COUNT-1] = expiration
+
+    // If there aren't 20 columns
+    if (toReturn.length < INTERVAL_COUNT-1){
+        toReturn[toReturn.length-1] = expiration
+    }else{
+        // Manually set last column
+        toReturn[INTERVAL_COUNT-1] = expiration
+    }
+    
     console.log(toReturn)
 
     return toReturn

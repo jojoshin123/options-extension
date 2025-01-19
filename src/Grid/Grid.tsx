@@ -64,7 +64,6 @@ function generateMonthRow(dateArray : Date[]): ReactElement[][] {
 
 
 const Grid = (expiration: GridProps) => {
-  const gridSize = 20;
 
   //   const [grid, setGrid] = useState<number[][]>([])
   //   useEffect(() => {
@@ -72,6 +71,9 @@ const Grid = (expiration: GridProps) => {
   //   });
 
   const dateAxis: Date[] = divideDateInterval(expiration.expiration)
+  const gridWidth = dateAxis.length;
+  const gridHeight = 20;
+
 //   .map(
 //     (date) => date.toISOString().slice(0,10) // get the raw date
 //   );
@@ -95,9 +97,9 @@ const Grid = (expiration: GridProps) => {
             </>
         }
         {
-            [...Array(gridSize)].map((_, rowIndex) => (
+            [...Array(gridHeight)].map((_, rowIndex) => (
             <div key={`row-${rowIndex}`} className="grid-row">
-                {[...Array(gridSize)].map((_, colIndex) => (
+                {[...Array(gridWidth)].map((_, colIndex) => (
                         mapColumns(rowIndex, colIndex, "xyz")
                     ))}
             </div>
