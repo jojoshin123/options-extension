@@ -1,6 +1,8 @@
 export interface Option {
-    ticker: String;
+    ticker: string;
     expiration: Date;
-    strike: Number;
-    contract: 'call' | 'put'
+    strike: number;
+    contract: 'call' | 'put';
+    volatility: number;
+    currentPremium: number;
 }

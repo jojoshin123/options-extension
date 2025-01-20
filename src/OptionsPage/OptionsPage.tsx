@@ -4,9 +4,10 @@ import './OptionsPage.scss';
 
 interface OptionsPageProps {
     option: Option | null;
+    currentPrice: number;
   }
 
-function OptionsPage({option}: OptionsPageProps) {
+function OptionsPage({option, currentPrice}: OptionsPageProps) {
 
     if (!option){
         return <></>
@@ -19,8 +20,9 @@ function OptionsPage({option}: OptionsPageProps) {
             <p>{option.contract}</p>
             <p>{option.expiration.toDateString()}</p>
             <p>{option.strike.toString()}</p>
+            <p>{option.currentPremium}</p>
         </div>
-        <Grid expiration={option.expiration} ></Grid>
+        <Grid option={option} currentPrice={currentPrice} ></Grid>
         </>
     );
   

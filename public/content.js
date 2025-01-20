@@ -13,10 +13,27 @@ const documentObserver = new MutationObserver((mutations) => {
                     parent: mutation.target,
                     addedNodes: mutation.addedNodes
                 });
+
+                const currentPremium = mutation.target.parentElement.querySelector(".css-zb6syf")
+
                 const optionsData = mutation.target.querySelector('.css-bp1p2y')
 
+                const volatility = Array.from(
+                    mutation.target.querySelectorAll('.web-app-emotion-cache-cjhhha')
+                ).filter(el => el.textContent.includes("%"))[0];
+
+                const currentPrice = document.querySelector(".web-app-emotion-cache-sz68n7")
+
                 // Send message to App.tsx
-                chrome.runtime.sendMessage({ type: 'TOGGLED', data: optionsData.textContent });
+                chrome.runtime.sendMessage({
+                    type: 'TOGGLED',
+                    data: {
+                        option: optionsData.textContent,
+                        currentPrice: currentPrice.textContent,
+                        volatility: volatility.textContent,
+                        currentPremium: currentPremium.textContent
+                    }
+                });
 
             } else if (mutation.removedNodes.length > 0) {
                 console.log('Children removed from .css-5a07nz element:', {
