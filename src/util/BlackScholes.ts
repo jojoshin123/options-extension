@@ -132,12 +132,13 @@ console.log('Greeks:', greeks);
 // Export functions and types
 
 console.log(blackScholes(
-    37.43,    // Current stock price
+    24.8,    // Current stock price
     28.5,    // Strike price
-    0.00821917808219178,      // Time to maturity (1 year)
+    0.005479452054794521,      // Time to maturity (1 year)
     0.0429,   // Risk-free rate (5%)
-    0.9667     // Volatility (20%)
+    0.6772     // Volatility (20%)
 ));
+
 
 export {
     blackScholes,
