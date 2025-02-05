@@ -17,7 +17,7 @@
 .grid-cell {
     text-align: center;
     font-weight: 200;
-    width: 40px;
+    width: 50px;
     // height: 40px;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -42,4 +42,17 @@
 
 .bold {
     font-weight: 800;
+}
+
+// -- Define Profit colors
+$base-green: #bfe1c8;
+$base-red: #ecc7c7;
+$step: 1%; // Adjust this value to control the variation between classes
+@for $i from 1 through 20 {
+    .color-green-#{$i} {
+        background-color: darken($base-green, $i * $step);
+    }
+    .color-red-#{$i} {
+        background-color: darken($base-red, $i * $step);
+    }
 }

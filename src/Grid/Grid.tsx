@@ -8,20 +8,32 @@ import { Option } from "../types/Option";
 
 interface GridProps {
   option: Option;
-  currentPrice : number;
+  currentPrice: number;
+  lowPrice: number;
+  highPrice: number
 }
 
-function generateCell(rowIndex: number, colIndex: number, content: string): ReactElement {
-  return (
-    <div key={`cell-${rowIndex}-${colIndex}`} className="grid-cell">
-      {content}
-    </div>
-  );
+function generatePriceCell(rowIndex: number, colIndex: number, priceDiff: number): ReactElement {
+
+    let colorClass : number = Math.ceil(priceDiff);
+    
+    if (colorClass > 20){
+        colorClass = 20
+    }else if (colorClass < -20){
+        colorClass = -20
+    }
+
+    const color : string = "color-" + (colorClass > 0 ? "green-" : "red-") + Math.abs(colorClass);
+    return (
+        <div key={`cell-${rowIndex}-${colIndex}`} className={`grid-cell ${color}`}>
+        {priceDiff.toFixed(1) + "%"}
+        </div>
+    );
 }
 
 function generateMonthRow(dateArray : Date[]): ReactElement[][] {
 
-    const CELL_WIDTH : number = 42;
+    const CELL_WIDTH : number = 52;
 
     const monthArray : ReactElement[] = []
     const dayArray : ReactElement[] = []
@@ -31,6 +43,14 @@ function generateMonthRow(dateArray : Date[]): ReactElement[][] {
     let currMonth : string = justMonthArray[0];
     let currWidth : number = 0;
     let colorClass : string = "grid-month-light";
+
+    // For day column
+    monthArray.push(
+        <div key={`cell-month-init`} className={`grid-cell bold ${colorClass}`}/>
+    );
+    dayArray.push(
+        <div key={`cell-day-init`} className={`grid-cell bold ${colorClass}`}/>
+    );
 
     for (let i = 0; i<dateArray.length; i++){
         
@@ -74,35 +94,31 @@ function generateMonthRow(dateArray : Date[]): ReactElement[][] {
 
         let toReturn : number[] = [];
     
-        for (let i = 0; i<dateAxis.length-1;i++){
+        for (let i = 0; i<dateAxis.length;i++){
 
             const dte = (option.expiration.valueOf() - dateAxis[i].valueOf())/86400000/365
-            console.log("STATS====== ", { 
-                price: price,
-                strike: option.strike,
-                dte: dte,
-                rate: 0.0429,
-                vol: option.volatility/100
-            });
 
-            toReturn.push(
-                parseFloat(blackScholes(
-                    price,    // Current stock price
-                    option.strike,    // Strike price
-                    dte,      // Time to maturity (1 year)
-                    0.0429,   // Risk-free rate (5%)
-                    option.volatility/100     // Volatility (20%)
-                ).call.toFixed(1))
-            );
+            const val = dte === 0
+            ? price-option.strike
+            : parseFloat(blackScholes(
+                price,    // Current stock price
+                option.strike,    // Strike price
+                dte,      // Time to maturity (1 year)
+                0.0429,   // Risk-free rate (5%)
+                option.volatility/100     // Volatility (20%)
+            ).call.toFixed(1));
+
+            toReturn.push(val);
             
         }
         return toReturn
   }
 
 
-const Grid = ({ option, currentPrice } : GridProps) => {
+const Grid = ({ option, currentPrice, lowPrice, highPrice } : GridProps) => {
 
     const [grid, _] = useState<number[][]>([])
+    const priceRange : number[] = [];
 
     const dateAxis: Date[] = divideDateInterval(option.expiration)
     const gridWidth = dateAxis.length;
@@ -111,28 +127,59 @@ const Grid = ({ option, currentPrice } : GridProps) => {
     // Months and days title rows
     const rows : ReactElement[][] = generateMonthRow(dateAxis);
 
-    const totalDTE : number = (option.expiration.valueOf() - dateAxis[0].valueOf())/86400000;
+    // Populate upper prices
+    // First, determine how many cells we can allocate to the upper range
+    const numOfUpperCells = Math.floor((currentPrice/highPrice)*gridHeight)
+    let increment = Math.abs((highPrice - currentPrice)/numOfUpperCells)
 
-    console.log("totalDTE: ", { totalDTE: totalDTE })
+    // Start populating rows top-down
+    // Edge case
+    grid.push(
+        generatePricedRow(
+            highPrice,
+            option,
+            dateAxis)
+    );
+    priceRange.push(highPrice);
 
-    // For each row, call populateRow based on gridHeight/2 being the center price
-    for (let i = 0; i<gridHeight/2;i++){
+    for (let i = numOfUpperCells-1; i>0;i--){
+        console.log(currentPrice + (i*increment));
         grid.push(
             generatePricedRow(
-                currentPrice + ((gridHeight/2)-i) ,
+                currentPrice + (i*increment),
                 option,
                 dateAxis)
         );
+        priceRange.push(currentPrice + i*increment);
     }
+    
+    priceRange.push(currentPrice);
 
-    for (let i = gridHeight/2; i>=0;i--){
+    // Populate lower prices
+    const numOfLowerCells = gridHeight-numOfUpperCells
+    increment = Math.abs((currentPrice - lowPrice)/numOfLowerCells)
+
+    for (let i = 1; i<numOfLowerCells;i++){
+        console.log(currentPrice - (i*increment));
         grid.push(
             generatePricedRow(
-                currentPrice - ((gridHeight/2)-i) ,
+                currentPrice - (i*increment),
                 option,
                 dateAxis)
         );
+        priceRange.push(currentPrice - i*increment);
     }
+    // Edge case
+    grid.push(
+        generatePricedRow(
+            lowPrice,
+            option,
+            dateAxis)
+    );
+    priceRange.push(lowPrice);
+
+    // Sort prices from high to low
+    priceRange.sort((a,b) => b-a)
 
     // How can we set a price range?
     // Prereq: lower bound < current price < upper bound
@@ -161,8 +208,15 @@ const Grid = ({ option, currentPrice } : GridProps) => {
             {
                 [...Array(gridHeight)].map((_, rowIndex) => (
                 <div key={`row-${rowIndex}`} className="grid-row">
+                    <div key={`cell-price-${priceRange[rowIndex].toFixed(2)}`} className={`grid-cell bold`}>
+                        {"$"+priceRange[rowIndex].toFixed(1)}
+                    </div>
                     {[...Array(gridWidth)].map((_, colIndex) => (
-                            generateCell(rowIndex, colIndex, (grid[rowIndex][colIndex] - option.currentPremium).toFixed(1) + "%")
+                            generatePriceCell(
+                                rowIndex, 
+                                colIndex, 
+                                (grid[rowIndex][colIndex] - option.currentPremium)
+                            )
                         ))}
                 </div>
                 ))

@@ -22,7 +22,11 @@ function OptionsPage({option, currentPrice}: OptionsPageProps) {
             <p>{option.strike.toString()}</p>
             <p>{option.currentPremium}</p>
         </div>
-        <Grid option={option} currentPrice={currentPrice} ></Grid>
+        <Grid 
+            option={option} 
+            currentPrice={currentPrice} 
+            lowPrice={currentPrice-15} 
+            highPrice={currentPrice+15} />
         </>
     );
   
