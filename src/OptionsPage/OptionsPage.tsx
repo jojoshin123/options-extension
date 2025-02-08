@@ -16,17 +16,17 @@ function OptionsPage({option, currentPrice}: OptionsPageProps) {
     return (
         <>
         <div>
-            <p>{option.ticker}</p>
+            {/* <p>{option.ticker}</p>
             <p>{option.contract}</p>
             <p>{option.expiration.toDateString()}</p>
             <p>{option.strike.toString()}</p>
-            <p>{option.currentPremium}</p>
+            <p>{option.currentPremium}</p> */}
         </div>
         <Grid 
             option={option} 
             currentPrice={currentPrice} 
-            lowPrice={currentPrice-15} 
-            highPrice={currentPrice+15} />
+            lowPrice={currentPrice-5} 
+            highPrice={currentPrice+5} />
         </>
     );
   

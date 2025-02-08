@@ -16,7 +16,7 @@
 
 .grid-cell {
     text-align: center;
-    font-weight: 200;
+    font-weight: 300;
     width: 50px;
     // height: 40px;
     padding-top: 15px;
@@ -46,13 +46,18 @@
 
 // -- Define Profit colors
 $base-green: #bfe1c8;
-$base-red: #ecc7c7;
-$step: 1%; // Adjust this value to control the variation between classes
-@for $i from 1 through 20 {
+$base-red: #f1c0c0;
+$step: 0.5%; // Adjust this value to control the variation between classes
+@for $i from 1 through 40 {
     .color-green-#{$i} {
         background-color: darken($base-green, $i * $step);
     }
     .color-red-#{$i} {
         background-color: darken($base-red, $i * $step);
     }
+}
+
+// Neutral color
+.color-red-0 {
+    background-color: #dedede;
 }

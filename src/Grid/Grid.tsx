@@ -13,20 +13,24 @@ interface GridProps {
   highPrice: number
 }
 
-function generatePriceCell(rowIndex: number, colIndex: number, priceDiff: number): ReactElement {
+function generatePriceCell(
+    rowIndex: number, 
+    colIndex: number, 
+    newPrice : number, 
+    currPrice: number): ReactElement {
 
-    let colorClass : number = Math.ceil(priceDiff);
-    
-    if (colorClass > 20){
-        colorClass = 20
-    }else if (colorClass < -20){
-        colorClass = -20
+    let colorClass : number = Math.ceil((newPrice-currPrice)*40);
+
+    if (colorClass > 40){
+        colorClass = 40
+    }else if (colorClass < -40){
+        colorClass = -40
     }
 
     const color : string = "color-" + (colorClass > 0 ? "green-" : "red-") + Math.abs(colorClass);
     return (
         <div key={`cell-${rowIndex}-${colIndex}`} className={`grid-cell ${color}`}>
-        {priceDiff.toFixed(1) + "%"}
+        {"$" + newPrice.toFixed(1)}
         </div>
     );
 }
@@ -215,7 +219,8 @@ const Grid = ({ option, currentPrice, lowPrice, highPrice } : GridProps) => {
                             generatePriceCell(
                                 rowIndex, 
                                 colIndex, 
-                                (grid[rowIndex][colIndex] - option.currentPremium)
+                                grid[rowIndex][colIndex],
+                                option.currentPremium
                             )
                         ))}
                 </div>
