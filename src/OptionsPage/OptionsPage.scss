@@ -1,3 +1,29 @@
 .container {
     justify-content: center;
 }
+
+.inputContainer {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-h3 {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.hyphen {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.input-box {
+    max-height: fit-content;
+    width: fit-content;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 22px;
+}
