@@ -11,8 +11,8 @@
 }
 
 .input-h3 {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 .hyphen {
@@ -23,7 +23,18 @@
 .input-box {
     max-height: fit-content;
     width: fit-content;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 22px;
+    appearance: none;
+    border: none;
+    outline: none;
+    border-bottom: .2em solid #8a8a8a;
+    background: rgba(#cacaca, .2);
+    border-radius: .2em .2em 0 0;
+    padding: .4em;
+}
+
+.submit-buttom {
+    max-height: fit-content;
+    width: fit-content;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }

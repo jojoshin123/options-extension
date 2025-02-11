@@ -1,5 +1,5 @@
 // Grid.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Grid.scss";
 import { divideDateInterval } from "../util/DateUtil";
 import { ReactElement } from "react";
@@ -121,7 +121,7 @@ function generateMonthRow(dateArray : Date[]): ReactElement[][] {
 
 const Grid = ({ option, currentPrice, lowPrice, highPrice } : GridProps) => {
 
-    const [grid, _] = useState<number[][]>([])
+    const [grid, setGrid] = useState<number[][]>([])
     const priceRange : number[] = [];
 
     const dateAxis: Date[] = divideDateInterval(option.expiration)
@@ -131,6 +131,12 @@ const Grid = ({ option, currentPrice, lowPrice, highPrice } : GridProps) => {
     // Months and days title rows
     const rows : ReactElement[][] = generateMonthRow(dateAxis);
 
+    useEffect(() => {
+        console.log('lowPrice or highPrice changed:', { lowPrice, highPrice });
+        setGrid([]);
+    }, [lowPrice, highPrice]);
+
+    
     // Populate upper prices
     // First, determine how many cells we can allocate to the upper range
     const numOfUpperCells = Math.floor((currentPrice/highPrice)*gridHeight)

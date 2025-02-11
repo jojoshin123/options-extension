@@ -59,19 +59,21 @@ function OptionsPage({option, currentPrice}: OptionsPageProps) {
                         name="lowPriceInput" 
                         defaultValue={lowPrice}
                         size={lowPrice.toString().length}
-                        type='text'/>
+                        type='text'
+                        style={{'marginLeft': '1rem'}}/>
                     <h4 className='hyphen'>—</h4>
                     <input 
                         className='input-box' 
                         name="highPriceInput" 
                         defaultValue={highPrice}
                         size={highPrice.toString().length}
-                        type='text'/>
-                    <button type="submit">Set price range</button>
+                        type='text'
+                        style={{'marginRight': '1rem'}}/>
+                    <button type="submit" className='submit-buttom'>Update price range</button>
                 </span>
             </label>
         </form>
-        <div>{errorToggle ? <p>This is an error</p> : <></>}</div>
+        <div className=''>{errorToggle ? <p>This is an error</p> : <></>}</div>
         </>
         
     );
