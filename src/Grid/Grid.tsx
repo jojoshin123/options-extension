@@ -16,10 +16,10 @@ interface GridProps {
 function generatePriceCell(
     rowIndex: number, 
     colIndex: number, 
-    newPrice : number, 
-    currPrice: number): ReactElement {
+    newPremium : number, 
+    currPremium: number): ReactElement {
 
-    let colorClass : number = Math.ceil((newPrice-currPrice)*40);
+    let colorClass : number = Math.ceil((newPremium-currPremium)*40);
 
     if (colorClass > 40){
         colorClass = 40
@@ -30,7 +30,7 @@ function generatePriceCell(
     const color : string = "color-" + (colorClass > 0 ? "green-" : "red-") + Math.abs(colorClass);
     return (
         <div key={`cell-${rowIndex}-${colIndex}`} className={`grid-cell ${color}`}>
-        {"$" + newPrice.toFixed(1)}
+        {"$" + Math.max((newPremium-currPremium), (currPremium*-1)).toFixed(1)}
         </div>
     );
 }
@@ -47,6 +47,8 @@ function generateMonthRow(dateArray : Date[]): ReactElement[][] {
     let currMonth : string = justMonthArray[0];
     let currWidth : number = 0;
     let colorClass : string = "grid-month-light";
+
+    console.log(`justMonthArray: ${justMonthArray}`)
 
     // For day column
     monthArray.push(
@@ -163,14 +165,13 @@ const Grid = ({ option, currentPrice, lowPrice, highPrice } : GridProps) => {
         priceRange.push(currentPrice + i*increment);
     }
     
-    priceRange.push(currentPrice);
+    // priceRange.push(currentPrice);
 
     // Populate lower prices
     const numOfLowerCells = gridHeight-numOfUpperCells
     increment = Math.abs((currentPrice - lowPrice)/numOfLowerCells)
 
     for (let i = 1; i<numOfLowerCells;i++){
-        console.log(currentPrice - (i*increment));
         grid.push(
             generatePricedRow(
                 currentPrice - (i*increment),
@@ -195,8 +196,7 @@ const Grid = ({ option, currentPrice, lowPrice, highPrice } : GridProps) => {
     // Prereq: lower bound < current price < upper bound
     // Take price range, divide by 20. That is each price increment
 
-    console.log("grid: ", grid);
-        
+    console.log("priceRange: ", priceRange);
 
     return (
         <div className="grid-container">

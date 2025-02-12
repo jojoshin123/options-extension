@@ -40,41 +40,54 @@ function OptionsPage({option, currentPrice}: OptionsPageProps) {
     const date : string = `${option.expiration.getMonth()}/${option.expiration.getDay()}/${option.expiration.getFullYear()}`
     const content : string = `${option.ticker} $${option.strike.toString()} ${option.contract} ${date} heatmap`
     
-    // setHighPrice(currentPrice+5);
-    // setLowPrice(currentPrice-5);
     return (
-        <>
-        <h2>{content}</h2>
-        <Grid
-            option={option} 
-            currentPrice={currentPrice} 
-            lowPrice={lowPrice} 
-            highPrice={highPrice} />
-        <form onSubmit={handleSubmit}>
-            <label>
-                <span className='inputContainer'>
-                    <h3 className='input-h3'>Price range:</h3>
-                    <input 
-                        className='input-box' 
-                        name="lowPriceInput" 
-                        defaultValue={lowPrice}
-                        size={lowPrice.toString().length}
-                        type='text'
-                        style={{'marginLeft': '1rem'}}/>
-                    <h4 className='hyphen'>—</h4>
-                    <input 
-                        className='input-box' 
-                        name="highPriceInput" 
-                        defaultValue={highPrice}
-                        size={highPrice.toString().length}
-                        type='text'
-                        style={{'marginRight': '1rem'}}/>
-                    <button type="submit" className='submit-buttom'>Update price range</button>
-                </span>
-            </label>
-        </form>
-        <div className=''>{errorToggle ? <p>This is an error</p> : <></>}</div>
-        </>
+        <div className='container'>
+            <h2>{content}</h2>
+            <div className='text-block'>
+                <p>This heatmap shows the contract's profitability at the given date.</p>
+                <p>
+                    On expiration day, the price simply reflects the intrinsic value, or <b>the difference between the 
+                    contract's strike and the current price. </b>
+                    Losses are capped at max loss (the current cost of the contract)
+                </p>
+            </div>
+            <Grid
+                option={option} 
+                currentPrice={currentPrice} 
+                lowPrice={lowPrice} 
+                highPrice={highPrice} />
+            <br/>
+            <div className='text-block'>
+                <p>The grid is capped at 20 cells -- 
+                    the price range will spread evenly across the cells.</p>
+                <p>Lower price range must be <b>below</b> the current price, 
+                and the upper price range must be <b>above</b> the current price.</p>
+            </div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    <span className='inputContainer'>
+                        <h3 className='input-h3'>Price range:</h3>
+                        <input 
+                            className='input-box' 
+                            name="lowPriceInput" 
+                            defaultValue={lowPrice}
+                            size={lowPrice.toString().length}
+                            type='text'
+                            style={{'marginLeft': '1rem'}}/>
+                        <h4 className='hyphen'>—</h4>
+                        <input 
+                            className='input-box' 
+                            name="highPriceInput" 
+                            defaultValue={highPrice}
+                            size={highPrice.toString().length}
+                            type='text'
+                            style={{'marginRight': '1rem'}}/>
+                        <button type="submit" className='submit-buttom'>Update price range</button>
+                    </span>
+                </label>
+            </form>
+            <div className=''>{errorToggle ? <p>This is an error</p> : <></>}</div>
+        </div>
         
     );
   
