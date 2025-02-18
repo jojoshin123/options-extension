@@ -12,3 +12,4 @@ You can then load it onto your Chrome browser by visiting chrome://extensions ->
 
 TODO:
   - Change CSS query selectors -- the current selectors only work in Robinhood Dark mode
+  - Risk-free interest rate is currently hard-coded at 4.29%. This data should be dynamically pulled from another source
